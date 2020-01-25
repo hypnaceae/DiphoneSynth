@@ -9,7 +9,11 @@ Note for Windows users: PyAudio must be installed via pipwin (i.e `pip install p
 
 Run diphone_synth.py in the command line with the following arguments:
 
-
+- *"Your phrase"*, as the text you want to synthesise. Default: None
+- *--play* or *-p*, to play the generated waveform. Default: True
+- *--crossfade* or *-c*, to enable crossfading (TD-PSOLA) of diphones for smoother-sounding output. Default: False
+- *--volume* or *-v*, to specify the volume of the audio output (range 1 to 100). Default: 100
+- *--outfile* or *-o* followed by *filename.wav*, to save the output to a new file, path relative. Default: None
 
 The 'diphones' folder should be in the same directory as diphone_synth.py and interface_audio.py. 
 
