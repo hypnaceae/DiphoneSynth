@@ -3,7 +3,7 @@ A basic object-oriented text-to-speech program using diphone speech synthesis.
 
 ### Usage
 
-Requires PyAudio, Pylab, Numpy, and NLTK.
+Requires PyAudio, Numpy, and NLTK.
 
 Note for Windows users: PyAudio must be installed via pipwin (i.e `pip install pipwin` followed by `pipwin install pyaudio`)
 
@@ -14,6 +14,7 @@ Run diphone_synth.py in the command line with the following arguments:
 - *--crossfade* or *-c*, to enable crossfading (TD-PSOLA) of diphones for smoother-sounding output. Default: False
 - *--volume* or *-v*, to specify the volume of the audio output (range 1 to 100). Default: 100
 - *--outfile* or *-o* followed by *filename.wav*, to save the output to a new file, path relative. Default: None
+- *--help* or *-h* to open the help menu with these instructions.
 
 The 'diphones' folder should be in the same directory as diphone_synth.py and interface_audio.py. 
 
