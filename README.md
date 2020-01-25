@@ -7,6 +7,8 @@ Requires PyAudio, Numpy, and NLTK.
 
 Note for Windows users: PyAudio must be installed via pipwin (i.e `pip install pipwin` followed by `pipwin install pyaudio`)
 
+Important: unpack the diphones.7z archive such that the diphones folder is on the same level as the .py files!
+
 Run diphone_synth.py in the command line with the following arguments:
 
 - *"Your phrase"*, as the text you want to synthesise. Default: None
@@ -16,6 +18,5 @@ Run diphone_synth.py in the command line with the following arguments:
 - *--save* or *-s* followed by *filename.wav*, to save the output to a new file, path relative. Default: None
 - *--help* or *-h* to open the help menu with these instructions.
 
-The 'diphones' folder should be in the same directory as diphone_synth.py and interface_audio.py. 
 
 In theory, you can use a different diphone database. You will have to update the global variable SAMPLE_RATE to match that of your wav files. The filename conventions will also have to be the same.
