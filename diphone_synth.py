@@ -47,14 +47,11 @@ SAMPLE_RATE = 16000  # the sample rate of .wav files in ./diphones.
 
 class Utterance:
     """
-    The Utterance object: the frontend of the TTS system.
-    Here we tokenise the user's input, normalise dates into
+    The Utterance object: the frontend of the TTS system. Here we tokenise the user's input, normalise dates into
     speakable words, and build a sequence of diphones.
 
-    Much extension opportunity for this class. Can normalise
-    many more types of numbers: e.g monetary values, numbers alone,
-    time, percentages etc. As is, the synthesiser will fail to process
-    these tokens.
+    Much extension opportunity for this class. Can normalise many more types of numbers: e.g monetary values, numbers alone,
+    time, percentages etc. As is, the synthesiser will fail to process these tokens.
     """
     def __init__(self, phrase):
         self.final_tokenisation = list()
