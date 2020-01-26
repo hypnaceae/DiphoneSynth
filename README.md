@@ -20,3 +20,5 @@ Run diphone_synth.py in the command line with the following arguments:
 
 
 In theory, you can use a different diphone database. You will have to update the global variable SAMPLE_RATE to match that of your wav files. The filename conventions will also have to be the same.
+
+Diphones courtesy of Alan W. Black and Kevin Lenzo.
