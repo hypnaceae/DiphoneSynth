@@ -87,15 +87,13 @@ class Utterance:
 
     def normalise_dates(self, token):
         """      ---      DATE EXPANSION      ---
-        This module takes a token in the format DD/MM, DD/MM/YY,
-        or DD/MM/YYYY. It returns this as a list of strings
+        This module takes a token in the format DD/MM, DD/MM/YY, or DD/MM/YYYY. It returns this as a list of strings
         such as "June Twenty Eighth, Nineteen Fourteen".
 
-        This function could be extended as "normalise_numbers",
-        handling dates and other values in phrase input such
-        as integers (up to trillion?), monetary values,
-        times, mathematical expressions etc, because CMU
-        dictionary does not contain non-word characters. """
+        This function could be extended as "normalise_numbers", handling dates and other values in phrase input such
+        as integers (up to trillion?), monetary values, times, mathematical expressions etc, because CMU dictionary
+        does not contain non-word characters.
+        """
 
         # set up tuples with names. naturally, integer input will be used as index to find the corresponding word.
         # index 0 is set as some placeholder value in day_names and month_names
@@ -113,11 +111,10 @@ class Utterance:
 
         result_date = []
 
-        # spaghetti code ahead
-        # if re.match(dmy_reg, token) is not None:                           # first, handle DD/MM/YYYY cases.
+        # begin tedious expansion of date tokens
         date_matcher = dmy_reg.match(token)
         if date_matcher:
-            if 0 < int(date_matcher.group(1)) < 20:                        # handle days
+            if 0 < int(date_matcher.group(1)) < 20:  # handle days
                 result_date.append(day_names[int(date_matcher.group(1))])
             elif int(date_matcher.group(1)) == 20:
                 result_date.append(day_names[20])
@@ -130,37 +127,37 @@ class Utterance:
                 result_date.append(day_names[23])
                 result_date.append(day_names[1])
 
-            result_date.append(month_names[int(date_matcher.group(2))])    # handle month
+            result_date.append(month_names[int(date_matcher.group(2))])  # handle month
             result_date.append(",")
 
+            # with the following code, only years from 1000 to 2099 are supported
             if 1000 <= int(date_matcher.group(3)) <= 1999:
                 result_date.append(under_twenty[int(date_matcher.group(3))[:1]])  # take only the millennium and century
             elif 2000 <= int(date_matcher.group(3)) <= 2099:
                 result_date.append(tens[0])
 
-            year = int(date_matcher.group(3)) % 100                        # get last two digits of year
+            year = int(date_matcher.group(3)) % 100  # get last two digits of year
 
-            if 1 <= year < 10:                                             # handle first decade separately
+            if 1 <= year < 10:  # handle first decade separately
                 result_date.append(under_twenty[0])
                 result_date.append(under_twenty[year])
-            elif 10 <= year < 20:                                          # handle teens
+            elif 10 <= year < 20:  # handle teens
                 result_date.append(under_twenty[year])
-            elif 20 <= year <= 99:                                         # handle rest of the decades...
-                ten, under_ten = divmod(year, 10)                          # get quotient and remainder to use
-                result_date.append(tens[ten - 2])                          # as indices for getting name from
-                result_date.append(under_twenty[under_ten])                # 20 to 99
+            elif 20 <= year <= 99:  # handle rest of the decades...
+                ten, under_ten = divmod(year, 10)  # get quotient and remainder to use
+                result_date.append(tens[ten - 2])  # as indices for getting name from 20 to 99
+                result_date.append(under_twenty[under_ten]) 
             else:
-                print("Invalid year.")                                     # this shouldn't happen
+                print("Invalid year.")  # this shouldn't happen
 
             # clean up trailing "Oh"
             if result_date[-1] == "Oh":
                 result_date.pop(-1)
 
-        # if re.match(dm_reg, token) is not None:                            # next, handle DD/MM cases.
-        date_matcher = dm_reg.match(token)
-        if date_matcher:
+        date_matcher = dm_reg.match(token)  # now, for handling DD/MM cases. This is largely repeated from above,
+        if date_matcher:                    # so check if we might optimise this a bit.
 
-            if int(date_matcher.group(1)) < 20:                            # handle days
+            if int(date_matcher.group(1)) < 20:  # handle days
                 result_date.append(day_names[int(date_matcher.group(1))])
             elif int(date_matcher.group(1)) == 20:
                 result_date.append(day_names[20])
@@ -173,17 +170,15 @@ class Utterance:
                 result_date.append(day_names[23])
                 result_date.append(day_names[1])
 
-            result_date.append(month_names[int(date_matcher.group(2))])    # handle month
+            result_date.append(month_names[int(date_matcher.group(2))])  # handle month
 
         return result_date
 
     def get_phone_seq(self):
         """---      LETTER TO SOUND      ---
-        This module creates a diphone sequence from the
-        tokenised phrase by first looking up each word token
-        in the CMU phones dictionary, and then joining pairs
-        of these into diphones. It also replaces punctuation
-        with appropriate lengths of silence.
+        This module creates a diphone sequence from the tokenised phrase by first looking up each word token in the CMU
+        phones dictionary, and then joining pairs of these into diphones. It also replaces punctuation with appropriate
+        lengths of silence.
         """
 
         print("Processing diphones...")
@@ -224,7 +219,7 @@ class Utterance:
             elif elem not in punctuation and nextelem not in punctuation:  # otherwise just make the diphone
                 diphone_sequence.append(re.sub(r'\d+', '', elem) + "-" + re.sub(r'\d+', '', nextelem))
 
-            if elem in punctuation:  # now replace punctuation with silences of appropriate length
+            if elem in punctuation:  # now replace punctuation with markers for silences of appropriate length
                 if elem in punctuation_long:
                     diphone_sequence.append("400ms-silence")
                 elif elem in punctuation_short:
@@ -235,15 +230,16 @@ class Utterance:
 
 class Synth:
     """
-    Get the output of Utterance.get_phone_seq() (a list of diphones), get the corresponding
-    filenames of each diphone, put the appropriate length of silences, make a temporary
-    audio processing object to help in concatenating all the audio data of each diphone.
+    Get the output of Utterance.get_phone_seq() (a list of diphones), get the corresponding filenames of each diphone, 
+    put the appropriate length of silences, make a temporary audio processing object to help in concatenating all the
+    audio data of each diphone.
     """
 
     def __init__(self):
         self.diphones = {}
 
     def get_wavs(self, wav_folder=args.diphones):
+        """Convert the joined diphone list into a list of .wav filenames that can later be loaded as audio."""
 
         # make a set of existing diphone names to check against, so we don't get errors down the line
         wav_list = set([])
@@ -267,6 +263,11 @@ class Synth:
         return wavs_for_concatenation
 
     def make_and_concatenate_chunks(self):
+        """
+        First insert the actual silences (i.e zeroes), and load the corresponding audio data for each diphone file.
+        Includes the option to crossfade each file. Finally, return a fully-formed ndarray that can be fed into
+        our audio interface.
+        """
 
         temp_audio = audio_interface.Audio(rate=SAMPLE_RATE)
 
