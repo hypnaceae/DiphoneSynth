@@ -13,6 +13,10 @@ from nltk.corpus import cmudict
 import re
 import numpy as np
 
+
+SAMPLE_RATE = 16000  # the sample rate of .wav files in ./diphones.
+
+
 parser = argparse.ArgumentParser(
     description='A basic object oriented text-to-speech program using diphone speech synthesis.')
 parser.add_argument('--diphones', default="./diphones", help="Relative path to folder containing diphone .wavs")
@@ -42,7 +46,6 @@ dm_reg = re.compile(r"""
        (?P<month>[1-9]|1[012])$                # group as "month" all matches between 1 and 12 at the end of the string
        """, re.VERBOSE)
 
-SAMPLE_RATE = 16000  # the sample rate of .wav files in ./diphones.
 
 
 class Utterance:
