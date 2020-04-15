@@ -13,7 +13,7 @@ Run diphone_synth.py in the command line with the following arguments:
 
 - *"Your phrase"*, as the text you want to synthesise. Default: None
 - *--play* or *-p*, to play the generated waveform. Default: True
-- *--crossfade* or *-c*, to enable crossfading (TD-PSOLA) of diphones for smoother-sounding output. Default: False
+- *--crossfade* or *-c*, to enable crossfading (taper, overlap, add) of diphones for smoother-sounding output. Default: False
 - *--volume* or *-v*, to specify the volume of the audio output (range 1 to 100). Default: 100
 - *--save* or *-s* followed by *filename.wav*, to save the output to a new file, path relative. Default: None
 - *--help* or *-h* to open the help menu with these instructions.
